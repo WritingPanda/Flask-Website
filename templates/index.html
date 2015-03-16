@@ -2,6 +2,7 @@
 
 {% block topscripts %}
     <script>
+    // Using jQuery
     $(function() {
         $('button#calculate').bind('click', function() {
             $.getJSON('/_add_numbers', {
@@ -13,6 +14,27 @@
             return false;
         });
     });
+
+    // Without using jQuery
+    var xmlhttp;
+    function getNum()
+    {
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = callback;
+
+        xmlhttp.open("GET", '/_random_number', true);
+        xmlhttp.send();
+    }
+
+    // When information comes back from the server
+    function callback()
+    {
+        console.log("Ready State: " + xmlhttp.readyState + "\nStatus: " + xmlhttp.status);
+        if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        {
+            document.getElementById('result2').innerHTML = xmlhttp.responseText;
+        }
+    }
     </script>
 {% endblock %}
 
@@ -21,7 +43,13 @@
         <input type="text" size="5" name="a"/> +
         <input type="text" size="5" name="b"/> =
         <span id="result">?</span>
+
         <br/><br/>
-        <button onclick="javascript:void();" id="calculate">Calculate</button>
+
+        <button id="calculate">Calculate</button>
     </form>
+    <br/><br/>
+
+    <div id="result2"></div>
+    <button onclick="getNum()">Get Random Number</button>
 {% endblock %}
